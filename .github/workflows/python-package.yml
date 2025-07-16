@@ -3,16 +3,17 @@ name: Habit Tracker Check
 on: [push]
 
 jobs:
-  run-habit:
+  test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout Code
+      uses: actions/checkout@v2
 
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
 
-      - name: Run Habit Tracker (test run)
-        run: python tracker.py < /dev/null
+    - name: Run Habit Tracker in CI Mode
+      run: python tracker.py ci
