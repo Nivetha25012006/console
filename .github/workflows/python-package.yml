@@ -16,4 +16,4 @@ jobs:
         python-version: 3.9
 
     - name: Run Habit Tracker in CI Mode
-      run: python tracker.py ci
+     run: python habit_tracker.py ci
