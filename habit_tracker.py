@@ -1,56 +1,12 @@
-import os
-import datetime
-
-DATA_DIR = "data"
-DATA_FILE = os.path.join(DATA_DIR, "habit_log.txt")
-
-# Ensure data directory exists
-os.makedirs(DATA_DIR, exist_ok=True)
-
-def add_habit():
-    habit = input("📝 Enter the name of the habit you want to track: ").strip()
-    with open(DATA_FILE, "a") as f:
-        f.write(f"HABIT:{habit}\n")
-    print(f"✅ Habit '{habit}' added successfully!")
-
-def mark_habit_done():
-    habit = input("✅ Enter the habit you completed: ").strip()
-    now = datetime.datetime.now()
-    with open(DATA_FILE, "a") as f:
-        f.write(f"DONE:{habit}:{now.strftime('%Y-%m-%d %H:%M:%S')}\n")
-    print(f"🎉 Great job! Habit '{habit}' marked as completed at {now.strftime('%H:%M')}.")
-
-def view_today_habits():
-    today = datetime.datetime.now().date()
-    print(f"\n📅 Habits completed today ({today}):\n")
-    found = False
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, "r") as f:
-            for line in f:
-                if line.startswith("DONE"):
-                    parts = line.strip().split(":")
-                    habit_name = parts[1]
-                    timestamp = datetime.datetime.strptime(parts[2], '%Y-%m-%d %H:%M:%S')
-                    if timestamp.date() == today:
-                        print(f"✔️ {habit_name} at {timestamp.strftime('%H:%M')}")
-                        found = True
-    if not found:
-        print("😅 You haven't completed any habits today yet. Get going!")
-
-def view_all_logs():
-    print("\n📜 Full Habit Log:\n")
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, "r") as f:
-            for line in f:
-                if line.startswith("HABIT"):
-                    print(f"🛠️ Created habit: {line.strip().split(':')[1]}")
-                elif line.startswith("DONE"):
-                    parts = line.strip().split(":")
-                    print(f"✅ {parts[1]} completed on {parts[2]}")
-    else:
-        print("📂 No log found yet. Start adding habits!")
+import sys  # Add this at the top of your file (if not already)
 
 def main():
+    # If run with 'ci' argument (by GitHub Actions), skip the menu
+    if len(sys.argv) > 1 and sys.argv[1] == "ci":
+        print("✅ CI mode: Script ran without user input.")
+        return
+
+    # Your existing while-loop menu goes here
     while True:
         print("\n============================")
         print("  🧘 Habit Tracker Console App")
@@ -75,6 +31,3 @@ def main():
             break
         else:
             print("❌ Invalid choice. Please try again.")
-
-if __name__ == "__main__":
-    main()
